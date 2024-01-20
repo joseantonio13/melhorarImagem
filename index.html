@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> MELHORAR IMAGEM </title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #efe7e7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #c1f1e4;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.89);
+            max-width: 400px;
+            /* Tamanho máximo do contêiner */
+            margin: 0 auto;
+            /* Centralizar o contêiner na página */
+        }
+
+        #inputImagem {
+            margin-bottom: 20px;
+        }
+
+        #imagemSelecionada,
+        #imagemFiltrada {
+            width: 100%;
+            /* Ajustar a largura para 100% do contêiner */
+            max-height: 300px;
+            /* Altura máxima da imagem */
+            object-fit: contain;
+            /* Manter a proporção da imagem */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        #btnSalvar {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #btnSalvar:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1> SELECIONE A IMAGEM </h1>
+        <input type="file" id="inputImagem" accept="image/*">
+        <img id="imagemSelecionada" alt="Imagem selecionada">
+        <p>Imagem com filtros:</p>
+        <img src="" alt="Imagem com filtros" id="imagemFiltrada">
+        <button id="btnSalvar">Salvar Imagem</button>
+    </div>
+
+    <script>
+        var inputImagem = document.getElementById('inputImagem');
+        var imagemSelecionada = document.getElementById('imagemSelecionada');
+        var imagemFiltrada = document.getElementById('imagemFiltrada');
+        var btnSalvar = document.getElementById('btnSalvar');
+
+        inputImagem.addEventListener('change', function () {
+            if (inputImagem.files && inputImagem.files[0]) {
+                var urlImagem = URL.createObjectURL(inputImagem.files[0]);
+                imagemSelecionada.src = urlImagem;
+
+                // Aplicar filtros à imagem filtrada
+                imagemFiltrada.src = urlImagem;
+                imagemFiltrada.style.filter = 'brightness(145%) contrast(120%) saturate(126%)';
+            }
+        });
+
+        btnSalvar.addEventListener('click', function () {
+            if (imagemFiltrada.src) {
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+
+                // Definir as dimensões do canvas iguais às da imagem original
+                canvas.width = imagemFiltrada.naturalWidth;
+                canvas.height = imagemFiltrada.naturalHeight;
+
+                // Aplicar filtros ao contexto do canvas
+                ctx.filter = 'brightness(117%) contrast(100%) saturate(105%)';
+                ctx.drawImage(imagemFiltrada, 0, 0);
+
+                // Converter o canvas para blob
+                canvas.toBlob(function (blob) {
+                    // Criar um link para download e simular um clique
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'imagem_filtrada.png';
+                    link.click();
+                }, 'image/png');
+            }
+        });
+    </script>
+</body>
+
+</html>
